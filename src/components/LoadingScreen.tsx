@@ -27,28 +27,28 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoaded }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#FAF8F5] transition-opacity duration-700 ease-out ${
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center warm-cinema-bg transition-opacity duration-700 ease-out ${
         fadeOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      <div className="flex flex-col items-center max-w-sm px-6 text-center space-y-4">
-        <span className="font-display font-medium text-2xl md:text-3xl tracking-[0.16em] text-[#18181B]">
+      <div className="text-safe p-8 sm:p-10 flex flex-col items-center max-w-sm mx-4 text-center space-y-4 shadow-xl border border-[rgba(73,59,50,0.16)]">
+        <span className="font-display font-medium text-2xl md:text-3xl tracking-[0.04em] text-[#493B32] warm-text-shadow">
           PLAYLIST_BGM
         </span>
 
-        <p className="text-xs uppercase font-medium tracking-[0.2em] text-[#78716C] font-editorial italic text-sm">
+        <p className="font-editorial italic text-base sm:text-lg text-[#76685D]">
           Loading the memories...
         </p>
 
-        {/* Subtle minimalist progress line */}
-        <div className="w-48 h-[2px] bg-[#E8E2D8] rounded-full overflow-hidden mt-4">
+        {/* Minimalist progress line in terracotta & cream */}
+        <div className="w-52 h-[3px] bg-[#F4E8D5] rounded-full overflow-hidden mt-4 border border-[rgba(73,59,50,0.1)]">
           <div
-            className="h-full bg-[#A37E3E] transition-all duration-200 ease-out rounded-full"
+            className="h-full bg-[#C98B6B] transition-all duration-200 ease-out rounded-full"
             style={{ width: `${progress}%` }}
           />
         </div>
 
-        <span className="text-[10px] font-mono text-[#A8A29E] tabular-nums">
+        <span className="text-xs font-mono text-[#76685D] tabular-nums font-semibold">
           {Math.round(progress)}%
         </span>
       </div>

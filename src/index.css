@@ -2,50 +2,97 @@
 
 @layer base {
   :root {
-    --font-cinzel: 'Cinzel', serif;
-    --font-serif: 'Cormorant Garamond', Georgia, serif;
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-display: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    --font-editorial: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Inter', 'DM Sans', system-ui, -apple-system, sans-serif;
+
+    /* Warm Cinematic Pastel Palette */
+    --bg-primary: #FFF8EE;     /* warm ivory */
+    --bg-secondary: #F4E8D5;   /* soft cream */
+    --accent-terracotta: #C98B6B; /* muted terracotta */
+    --accent-sage: #8FA7A0;       /* dusty sage */
+    --accent-champagne: #D6B46A;  /* muted champagne */
+    --text-primary: #493B32;      /* warm espresso */
+    --text-secondary: #76685D;    /* warm taupe */
+    --text-light: #FFF9F1;
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #FAF8F5;
-    color: #1F1F23;
+    background-color: #FFF8EE;
+    color: #493B32;
+    font-size: 16px;
+    line-height: 1.6;
   }
 
   h1, h2, h3, .font-display {
-    font-family: var(--font-cinzel);
+    font-family: var(--font-display);
     letter-spacing: 0.04em;
+    color: #493B32;
   }
 
   .font-editorial {
-    font-family: var(--font-serif);
+    font-family: var(--font-editorial);
   }
+}
+
+/* Warm Cinematic Halo / Text Shadow for guaranteed title legibility */
+.warm-text-shadow {
+  text-shadow: 0 2px 14px rgba(255, 248, 238, 0.85), 0 1px 4px rgba(255, 248, 238, 0.95);
+}
+
+/* Text-Safe Zone: guarantees 100% WCAG AA readability over 3D scenes */
+.text-safe {
+  background: rgba(255, 250, 242, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(73, 59, 50, 0.16);
+  box-shadow: 0 4px 24px -2px rgba(73, 59, 50, 0.07), 0 1px 3px rgba(73, 59, 50, 0.04);
+  border-radius: 1rem;
+}
+
+.text-safe-subtle {
+  background: rgba(255, 248, 238, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(73, 59, 50, 0.12);
+  box-shadow: 0 2px 16px -1px rgba(73, 59, 50, 0.06);
+  border-radius: 0.875rem;
+}
+
+/* Atmospheric warm gradient backdrop */
+.warm-cinema-bg {
+  background: linear-gradient(
+    135deg,
+    #FFF8EE 0%,
+    #F4E8D5 50%,
+    #FFF4E8 100%
+  );
 }
 
 /* Subtle cinematic noise overlay */
 .film-grain {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+  background-image: radial-gradient(rgba(73, 59, 50, 0.025) 1px, transparent 0);
   background-size: 24px 24px;
 }
 
-/* Soft vignette */
+/* Soft warm vignette */
 .vignette-overlay {
-  background: radial-gradient(circle at center, transparent 45%, rgba(30, 26, 20, 0.05) 100%);
+  background: radial-gradient(circle at center, transparent 45%, rgba(73, 59, 50, 0.04) 100%);
   pointer-events: none;
 }
 
-/* Hide scrollbars for clean immersion while retaining scrollability */
+/* Smooth scrollbar matching warm cream */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #FAF8F5;
+  background: #FFF8EE;
 }
 ::-webkit-scrollbar-thumb {
-  background: #DDD6CE;
+  background: #E5D8C5;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C4B9AD;
+  background: #C98B6B;
 }

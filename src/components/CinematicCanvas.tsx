@@ -50,14 +50,14 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     const container = containerRef.current;
     if (!container) return;
 
-    // --- SCENE & COLOR PALETTE (Warm Cream / Off-White / Ivory) ---
+    // --- SCENE & COLOR PALETTE (Warm Ivory, Soft Cream & Pastel Accents) ---
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    const bgColor = new THREE.Color(0xfaf8f5);
+    const bgColor = new THREE.Color(0xfff8ee);
     scene.background = bgColor;
-    // Exponential soft depth fog matching the warm creamy background
-    scene.fog = new THREE.FogExp2(0xfaf8f5, 0.024);
+    // Exponential soft depth fog matching the warm ivory background
+    scene.fog = new THREE.FogExp2(0xfff8ee, 0.02);
 
     // --- CAMERA ---
     const width = container.clientWidth;
@@ -77,40 +77,46 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 1.8));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
+    renderer.toneMappingExposure = 1.08;
     container.appendChild(renderer.domElement);
 
-    // --- STUDIO LIGHTING SYSTEM ---
+    // --- STUDIO LIGHTING SYSTEM (Warm Afternoon Studio Glow — No Black Silhouettes) ---
     // Warm key directional light (soft champagne tone)
-    const keyLight = new THREE.DirectionalLight(0xfff3e6, 2.2);
+    const keyLight = new THREE.DirectionalLight(0xffedd6, 2.2);
     keyLight.position.set(12, 18, 14);
     scene.add(keyLight);
 
-    // Soft ambient fill light (warm ivory)
-    const ambientLight = new THREE.AmbientLight(0xf7f2ea, 1.4);
+    // Generous ambient fill light (warm ivory/cream) to keep all 3D objects soft & luminous
+    const ambientLight = new THREE.AmbientLight(0xfff5e8, 2.2);
     scene.add(ambientLight);
 
+    // Soft warm bounce light (dusty peach/champagne)
+    const bounceLight = new THREE.DirectionalLight(0xf4e8d5, 1.4);
+    bounceLight.position.set(-8, -6, 10);
+    scene.add(bounceLight);
+
     // Subtle rim backlight
-    const rimLight = new THREE.DirectionalLight(0xe8d9c5, 1.6);
+    const rimLight = new THREE.DirectionalLight(0xeddcc8, 1.5);
     rimLight.position.set(-10, -5, -20);
     scene.add(rimLight);
 
     // --- PROCEDURAL TEXTURES GENERATION ---
     const textureLoader = new THREE.TextureLoader();
 
-    // Helper: Canvas-drawn vinyl record texture
+    // Helper: Canvas-drawn vinyl record texture in warm espresso and cream
     const createVinylTexture = () => {
       const cv = document.createElement('canvas');
       cv.width = 512;
       cv.height = 512;
       const ctx = cv.getContext('2d')!;
-      ctx.fillStyle = '#18181b';
+      // Deep warm espresso body (avoiding pitch black)
+      ctx.fillStyle = '#3D332B';
       ctx.beginPath();
       ctx.arc(256, 256, 250, 0, Math.PI * 2);
       ctx.fill();
 
-      // Grooves
-      ctx.strokeStyle = '#27272a';
+      // Grooves in warm taupe
+      ctx.strokeStyle = '#504339';
       ctx.lineWidth = 1.5;
       for (let r = 90; r < 240; r += 7) {
         ctx.beginPath();
@@ -118,22 +124,27 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
         ctx.stroke();
       }
 
-      // Center label (Warm cream)
-      ctx.fillStyle = '#EDE8DF';
+      // Center label (Soft Cream #F4E8D5)
+      ctx.fillStyle = '#F4E8D5';
       ctx.beginPath();
       ctx.arc(256, 256, 85, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = '#18181B';
-      ctx.font = 'bold 22px Cinzel, serif';
+      // Label border ring in muted champagne
+      ctx.strokeStyle = '#D6B46A';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#493B32';
+      ctx.font = 'bold 20px Playfair Display, serif';
       ctx.textAlign = 'center';
       ctx.fillText('PLAYLIST_BGM', 256, 245);
-      ctx.font = '14px sans-serif';
-      ctx.fillStyle = '#71717A';
-      ctx.fillText('33⅓ RPM • STEREO', 256, 270);
+      ctx.font = '13px Inter, sans-serif';
+      ctx.fillStyle = '#76685D';
+      ctx.fillText('33⅓ RPM • ANALOG', 256, 270);
 
       // Spindle hole
-      ctx.fillStyle = '#09090b';
+      ctx.fillStyle = '#2B231D';
       ctx.beginPath();
       ctx.arc(256, 256, 14, 0, Math.PI * 2);
       ctx.fill();
@@ -143,18 +154,19 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
       return tex;
     };
 
-    // Helper: Canvas-drawn 35mm film strip texture
+    // Helper: Canvas-drawn 35mm film strip texture in vintage celluloid espresso and ivory
     const createFilmStripTexture = () => {
       const cv = document.createElement('canvas');
       cv.width = 1024;
       cv.height = 256;
       const ctx = cv.getContext('2d')!;
 
-      ctx.fillStyle = '#1c1b1a';
+      // Warm vintage celluloid espresso base
+      ctx.fillStyle = '#382F28';
       ctx.fillRect(0, 0, cv.width, cv.height);
 
-      // Sprocket holes (top and bottom)
-      ctx.fillStyle = '#FAF8F5';
+      // Sprocket holes (warm ivory #FFF8EE)
+      ctx.fillStyle = '#FFF8EE';
       const holeW = 18;
       const holeH = 26;
       for (let x = 12; x < cv.width; x += 36) {
@@ -174,19 +186,19 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
       const frameY = 53;
       for (let f = 0; f < 4; f++) {
         const fx = 35 + f * 245;
-        ctx.fillStyle = '#2d2a27';
+        ctx.fillStyle = '#493B32';
         ctx.fillRect(fx, frameY, frameW, frameH);
 
-        // Frame inner glow / simulated cinema still
+        // Frame inner glow / simulated cinema still in warm pastel tones
         const grad = ctx.createLinearGradient(fx, frameY, fx + frameW, frameY + frameH);
-        grad.addColorStop(0, '#4a423b');
-        grad.addColorStop(0.5, '#736557');
-        grad.addColorStop(1, '#3b342e');
+        grad.addColorStop(0, '#C98B6B'); // terracotta
+        grad.addColorStop(0.5, '#F4E8D5'); // cream
+        grad.addColorStop(1, '#8FA7A0'); // sage
         ctx.fillStyle = grad;
         ctx.fillRect(fx + 6, frameY + 6, frameW - 12, frameH - 12);
 
-        // Frame number text
-        ctx.fillStyle = '#C8BEB3';
+        // Frame number text in champagne
+        ctx.fillStyle = '#D6B46A';
         ctx.font = '10px monospace';
         ctx.fillText(`FRAME 0${f + 1} • 35MM`, fx + 10, frameY + frameH - 10);
       }
@@ -201,22 +213,40 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     const vinylTex = createVinylTexture();
     const filmStripTex = createFilmStripTexture();
 
-    // Material definitions (warm, refined, physically-based)
-    const goldAccentMat = new THREE.MeshStandardMaterial({
-      color: 0xd4af37,
-      metalness: 0.85,
-      roughness: 0.25,
+    // Material definitions based on warm pastel cinematic palette
+    const champagneGoldMat = new THREE.MeshStandardMaterial({
+      color: 0xd6b46a,
+      metalness: 0.8,
+      roughness: 0.28,
     });
 
-    const warmMetalMat = new THREE.MeshStandardMaterial({
-      color: 0x948979,
-      metalness: 0.6,
-      roughness: 0.35,
+    const terracottaMat = new THREE.MeshStandardMaterial({
+      color: 0xc98b6b,
+      metalness: 0.25,
+      roughness: 0.45,
+    });
+
+    const dustySageMat = new THREE.MeshStandardMaterial({
+      color: 0x8fa7a0,
+      metalness: 0.2,
+      roughness: 0.45,
+    });
+
+    const warmEspressoMat = new THREE.MeshStandardMaterial({
+      color: 0x493b32,
+      metalness: 0.3,
+      roughness: 0.5,
     });
 
     const ivoryCardMat = new THREE.MeshStandardMaterial({
-      color: 0xfdfbf7,
-      roughness: 0.7,
+      color: 0xfffaf2,
+      roughness: 0.65,
+      metalness: 0.05,
+    });
+
+    const creamCardMat = new THREE.MeshStandardMaterial({
+      color: 0xf4e8d5,
+      roughness: 0.6,
       metalness: 0.05,
     });
 
@@ -240,23 +270,23 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     const filmTubeGeo = new THREE.TubeGeometry(curve1, 64, 0.6, 8, false);
     const filmStripMat = new THREE.MeshStandardMaterial({
       map: filmStripTex,
-      roughness: 0.4,
+      roughness: 0.45,
       metalness: 0.2,
       side: THREE.DoubleSide,
     });
     const filmStripMesh = new THREE.Mesh(filmTubeGeo, filmStripMat);
     ch1Group.add(filmStripMesh);
 
-    // Floating golden resonance ring
+    // Floating resonance ring in champagne gold
     const soundRingGeo = new THREE.TorusGeometry(3.2, 0.06, 16, 64);
-    const soundRing = new THREE.Mesh(soundRingGeo, goldAccentMat);
+    const soundRing = new THREE.Mesh(soundRingGeo, champagneGoldMat);
     soundRing.position.set(0, 0, -1);
     soundRing.rotation.x = Math.PI / 3;
     ch1Group.add(soundRing);
 
-    // Inner delicate secondary ring
-    const innerRingGeo = new THREE.TorusGeometry(2.4, 0.03, 16, 48);
-    const innerRing = new THREE.Mesh(innerRingGeo, warmMetalMat);
+    // Inner delicate secondary ring in muted terracotta
+    const innerRingGeo = new THREE.TorusGeometry(2.4, 0.035, 16, 48);
+    const innerRing = new THREE.Mesh(innerRingGeo, terracottaMat);
     innerRing.position.set(0, 0, -1);
     innerRing.rotation.y = Math.PI / 4;
     ch1Group.add(innerRing);
@@ -265,8 +295,8 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     const vinylGeo = new THREE.CylinderGeometry(2.0, 2.0, 0.04, 48);
     const vinylMat = new THREE.MeshStandardMaterial({
       map: vinylTex,
-      roughness: 0.35,
-      metalness: 0.4,
+      roughness: 0.38,
+      metalness: 0.35,
     });
     const heroVinyl = new THREE.Mesh(vinylGeo, vinylMat);
     heroVinyl.position.set(2.8, -0.8, -2.5);
@@ -312,7 +342,7 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
 
       // Complementary album sleeve slab behind it
       const albumGeo = new THREE.BoxGeometry(3.0, 3.0, 0.1);
-      const albumMesh = new THREE.Mesh(albumGeo, ivoryCardMat);
+      const albumMesh = new THREE.Mesh(albumGeo, idx % 2 === 0 ? creamCardMat : dustySageMat);
       albumMesh.position.set(
         vMesh.position.x - 1.2,
         vMesh.position.y + 0.6,
@@ -323,14 +353,9 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
       ch2Group.add(albumMesh);
     });
 
-    // Stylized 3D Cassette Tape
+    // Stylized 3D Cassette Tape in muted terracotta
     const cassetteBodyGeo = new THREE.BoxGeometry(2.8, 1.8, 0.35);
-    const cassetteMat = new THREE.MeshStandardMaterial({
-      color: 0x2e2c29,
-      roughness: 0.4,
-      metalness: 0.3,
-    });
-    const cassette = new THREE.Mesh(cassetteBodyGeo, cassetteMat);
+    const cassette = new THREE.Mesh(cassetteBodyGeo, terracottaMat);
     cassette.position.set(-3.5, 1.2, -18);
     cassette.rotation.set(0.3, 0.6, -0.2);
     cassette.userData = {
@@ -342,20 +367,19 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     interactiveObjects.current.push(cassette);
     ch2Group.add(cassette);
 
-    // Cassette Spool Wheels
+    // Cassette Spool Wheels in soft cream
     const spoolGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.4, 24);
-    const spoolMat = new THREE.MeshStandardMaterial({ color: 0xf5f2eb, roughness: 0.5 });
-    const spoolLeft = new THREE.Mesh(spoolGeo, spoolMat);
+    const spoolLeft = new THREE.Mesh(spoolGeo, creamCardMat);
     spoolLeft.rotation.x = Math.PI / 2;
     spoolLeft.position.set(-0.65, 0, 0);
     cassette.add(spoolLeft);
 
-    const spoolRight = new THREE.Mesh(spoolGeo, spoolMat);
+    const spoolRight = new THREE.Mesh(spoolGeo, creamCardMat);
     spoolRight.rotation.x = Math.PI / 2;
     spoolRight.position.set(0.65, 0, 0);
     cassette.add(spoolRight);
 
-    // Stylized Headband & Earcups
+    // Stylized Headband & Earcups in champagne gold & dusty sage
     const headbandCurve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(-1.6, -0.6, 0),
       new THREE.Vector3(-1.3, 1.6, 0),
@@ -364,17 +388,16 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
       new THREE.Vector3(1.6, -0.6, 0),
     ]);
     const headbandGeo = new THREE.TubeGeometry(headbandCurve, 32, 0.1, 8, false);
-    const headphones = new THREE.Mesh(headbandGeo, goldAccentMat);
+    const headphones = new THREE.Mesh(headbandGeo, champagneGoldMat);
     headphones.position.set(3.8, 1.5, -20);
     headphones.rotation.set(-0.2, -0.5, 0.3);
 
     const earcupGeo = new THREE.CylinderGeometry(0.6, 0.6, 0.45, 24);
-    const earcupMat = new THREE.MeshStandardMaterial({ color: 0x22201e, roughness: 0.6 });
-    const earcupL = new THREE.Mesh(earcupGeo, earcupMat);
+    const earcupL = new THREE.Mesh(earcupGeo, dustySageMat);
     earcupL.position.set(-1.6, -0.6, 0);
     earcupL.rotation.z = Math.PI / 2;
     headphones.add(earcupL);
-    const earcupR = new THREE.Mesh(earcupGeo, earcupMat);
+    const earcupR = new THREE.Mesh(earcupGeo, dustySageMat);
     earcupR.position.set(1.6, -0.6, 0);
     earcupR.rotation.z = Math.PI / 2;
     headphones.add(earcupR);
@@ -387,12 +410,12 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     const ch3Group = new THREE.Group();
     scene.add(ch3Group);
 
-    // Projector Light Beam (Translucent cone glowing from projector source)
+    // Projector Light Beam in warm soft champagne
     const beamGeo = new THREE.ConeGeometry(5.5, 16, 32, 1, true);
     const beamMat = new THREE.MeshBasicMaterial({
-      color: 0xfffae6,
+      color: 0xfff6de,
       transparent: true,
-      opacity: 0.12,
+      opacity: 0.09,
       side: THREE.DoubleSide,
       depthWrite: false,
     });
@@ -402,28 +425,22 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     projectorBeam.rotation.z = 0.5;
     ch3Group.add(projectorBeam);
 
-    // 3D Film Reel
+    // 3D Film Reel in champagne gold and warm espresso
     const createFilmReelMesh = () => {
       const reelGroup = new THREE.Group();
       const flangeGeo = new THREE.CylinderGeometry(2.2, 2.2, 0.05, 32);
-      const flangeMat = new THREE.MeshStandardMaterial({
-        color: 0xd4af37,
-        metalness: 0.7,
-        roughness: 0.3,
-      });
 
-      const topFlange = new THREE.Mesh(flangeGeo, flangeMat);
+      const topFlange = new THREE.Mesh(flangeGeo, champagneGoldMat);
       topFlange.position.y = 0.3;
       reelGroup.add(topFlange);
 
-      const bottomFlange = new THREE.Mesh(flangeGeo, flangeMat);
+      const bottomFlange = new THREE.Mesh(flangeGeo, champagneGoldMat);
       bottomFlange.position.y = -0.3;
       reelGroup.add(bottomFlange);
 
-      // Core hub with wound film
+      // Core hub with wound film in warm espresso
       const hubGeo = new THREE.CylinderGeometry(1.6, 1.6, 0.55, 32);
-      const filmMat = new THREE.MeshStandardMaterial({ color: 0x1a1918, roughness: 0.7 });
-      const hub = new THREE.Mesh(hubGeo, filmMat);
+      const hub = new THREE.Mesh(hubGeo, warmEspressoMat);
       reelGroup.add(hub);
 
       return reelGroup;
@@ -441,7 +458,7 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     interactiveObjects.current.push(filmReel as unknown as THREE.Mesh);
     ch3Group.add(filmReel);
 
-    // Floating Movie Posters at staggered depths
+    // Floating Movie Posters at staggered depths with warm frames
     cinemaItems.forEach((cinema, idx) => {
       const posterTex = textureLoader.load(cinema.posterImage);
       posterTex.colorSpace = THREE.SRGBColorSpace;
@@ -463,13 +480,9 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
       posterMesh.rotation.y = idx % 2 === 0 ? -0.25 : 0.25;
       posterMesh.rotation.x = 0.05;
 
-      // Frame backing for physical depth
+      // Frame backing in warm espresso with champagne trim
       const frameGeo = new THREE.BoxGeometry(2.5, 3.5, 0.1);
-      const frameMat = new THREE.MeshStandardMaterial({
-        color: 0x1f1d1b,
-        roughness: 0.6,
-      });
-      const frameMesh = new THREE.Mesh(frameGeo, frameMat);
+      const frameMesh = new THREE.Mesh(frameGeo, warmEspressoMat);
       frameMesh.position.z = -0.06;
       posterMesh.add(frameMesh);
 
@@ -555,9 +568,9 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
       cardMesh.rotation.y = idx % 2 === 0 ? 0.3 : -0.3;
       cardMesh.rotation.x = 0.08;
 
-      // Card border
+      // Card border in warm cream
       const borderGeo = new THREE.BoxGeometry(2.38, 3.28, 0.06);
-      const borderMesh = new THREE.Mesh(borderGeo, ivoryCardMat);
+      const borderMesh = new THREE.Mesh(borderGeo, creamCardMat);
       borderMesh.position.z = -0.04;
       cardMesh.add(borderMesh);
 
@@ -579,16 +592,16 @@ export const CinematicCanvas: React.FC<CinematicCanvasProps> = ({
     const ch6Group = new THREE.Group();
     scene.add(ch6Group);
 
-    // Grand golden celestial halo
+    // Grand celestial halo in champagne gold
     const grandHaloGeo = new THREE.TorusGeometry(8.0, 0.08, 16, 100);
-    const grandHalo = new THREE.Mesh(grandHaloGeo, goldAccentMat);
+    const grandHalo = new THREE.Mesh(grandHaloGeo, champagneGoldMat);
     grandHalo.position.set(0, 0, -84);
     grandHalo.rotation.x = Math.PI / 4;
     ch6Group.add(grandHalo);
 
-    // Secondary concentric halo
+    // Secondary concentric halo in dusty sage
     const subHaloGeo = new THREE.TorusGeometry(5.5, 0.04, 16, 80);
-    const subHalo = new THREE.Mesh(subHaloGeo, warmMetalMat);
+    const subHalo = new THREE.Mesh(subHaloGeo, dustySageMat);
     subHalo.position.set(0, 0, -84);
     subHalo.rotation.y = Math.PI / 3;
     ch6Group.add(subHalo);

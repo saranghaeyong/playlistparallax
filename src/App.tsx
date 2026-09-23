@@ -61,7 +61,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#FAF8F5] text-[#1F1F23]">
+    <div className="relative min-h-screen warm-cinema-bg bg-[#FFF8EE] text-[#493B32]">
       {/* Loading Sequence */}
       {isLoading && <LoadingScreen onLoaded={() => setIsLoading(false)} />}
 
@@ -73,7 +73,7 @@ export default function App() {
         currentChapterIndex={currentChapterIndex}
       />
 
-      {/* Atmospheric Film Grain & Soft Vignette Layer */}
+      {/* Atmospheric Film Grain & Warm Soft Vignette Layer */}
       <div className="fixed inset-0 film-grain pointer-events-none z-20 opacity-30" />
       <div className="fixed inset-0 vignette-overlay pointer-events-none z-20" />
 
