@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-cinzel: 'Cinzel', serif;
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #FAF8F5;
+    color: #1F1F23;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-cinzel);
+    letter-spacing: 0.04em;
+  }
+
+  .font-editorial {
+    font-family: var(--font-serif);
+  }
+}
+
+/* Subtle cinematic noise overlay */
+.film-grain {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Soft vignette */
+.vignette-overlay {
+  background: radial-gradient(circle at center, transparent 45%, rgba(30, 26, 20, 0.05) 100%);
+  pointer-events: none;
+}
+
+/* Hide scrollbars for clean immersion while retaining scrollability */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #DDD6CE;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C4B9AD;
+}

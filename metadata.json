@@ -1,0 +1,6 @@
+{
+  "name": "PLAYLIST_BGM — Cinematic Music & Film Portfolio",
+  "description": "An interactive 3D cinematic world celebrating music, cinema, film edits, and memories. Created by Sarang RN.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
